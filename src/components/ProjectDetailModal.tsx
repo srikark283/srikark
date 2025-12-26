@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Github, ExternalLink, Network, Workflow } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import DiagramViewer from './DiagramViewer'
 
 interface Project {
   title: string
@@ -23,62 +23,6 @@ interface ProjectDetailModalProps {
 }
 
 const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProps) => {
-  const architectureRef = useRef<HTMLDivElement>(null)
-  const flowchartRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (isOpen && project && (project.architecture || project.flowchart)) {
-      const loadMermaid = async () => {
-        try {
-          const mermaid = (await import('mermaid')).default
-          
-          mermaid.initialize({
-            startOnLoad: false,
-            theme: 'dark',
-            themeVariables: {
-              primaryColor: '#0ea5e9',
-              primaryTextColor: '#fff',
-              primaryBorderColor: '#0284c7',
-              lineColor: '#64748b',
-              secondaryColor: '#1e293b',
-              tertiaryColor: '#0f172a',
-              background: '#0f172a',
-              textColor: '#e2e8f0',
-            },
-            flowchart: {
-              useMaxWidth: true,
-              htmlLabels: true,
-              curve: 'basis',
-            },
-          })
-          
-          // Render architecture diagram
-          if (project.architecture && architectureRef.current) {
-            architectureRef.current.innerHTML = ''
-            const archDiv = document.createElement('div')
-            archDiv.className = 'mermaid'
-            archDiv.textContent = project.architecture
-            architectureRef.current.appendChild(archDiv)
-            await mermaid.run({ nodes: [archDiv] })
-          }
-          
-          // Render flowchart
-          if (project.flowchart && flowchartRef.current) {
-            flowchartRef.current.innerHTML = ''
-            const flowDiv = document.createElement('div')
-            flowDiv.className = 'mermaid'
-            flowDiv.textContent = project.flowchart
-            flowchartRef.current.appendChild(flowDiv)
-            await mermaid.run({ nodes: [flowDiv] })
-          }
-        } catch (error) {
-          console.error('Error loading Mermaid:', error)
-        }
-      }
-      
-      loadMermaid()
-    }
-  }, [isOpen, project])
 
   if (!project) return null
 
@@ -92,7 +36,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
           />
 
           {/* Modal */}
@@ -100,9 +44,9 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="fixed inset-4 md:inset-8 lg:inset-12 z-50 overflow-y-auto"
+            className="fixed inset-4 md:inset-8 lg:inset-12 z-[110] overflow-y-auto pointer-events-none"
           >
-            <div className="glass-strong rounded-2xl p-6 md:p-8 max-w-5xl mx-auto my-8 max-h-[90vh] overflow-y-auto">
+            <div className="glass-strong rounded-2xl p-6 md:p-8 max-w-5xl mx-auto my-8 max-h-[90vh] overflow-y-auto pointer-events-auto">
               {/* Header */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
@@ -201,9 +145,10 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                       />
                     </div>
                   ) : project.architecture ? (
-                    <div
-                      ref={architectureRef}
-                      className="glass rounded-lg p-4 overflow-x-auto flex justify-center"
+                    <DiagramViewer
+                      diagramCode={project.architecture}
+                      title={`${project.title} - Architecture`}
+                      type="architecture"
                     />
                   ) : null}
                 </div>
@@ -216,9 +161,10 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
                     <Workflow className="w-5 h-5 text-primary-400" />
                     <h3 className="text-xl font-semibold text-white">Algorithm Flow</h3>
                   </div>
-                  <div
-                    ref={flowchartRef}
-                    className="glass rounded-lg p-4 overflow-x-auto flex justify-center"
+                  <DiagramViewer
+                    diagramCode={project.flowchart}
+                    title={`${project.title} - Flowchart`}
+                    type="flowchart"
                   />
                 </div>
               )}
