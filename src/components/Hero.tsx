@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowDown, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 const Hero = () => {
   const containerVariants = {

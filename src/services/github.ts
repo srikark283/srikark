@@ -184,7 +184,7 @@ export const fetchGitHubContributionsFromReadmeStats = async (
   try {
     // This uses the GitHub Readme Stats service
     // Note: This is a third-party service and may have rate limits
-    const response = await fetch(
+    await fetch(
       `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&hide_title=true&hide=prs,issues&count_private=true`
     )
 
