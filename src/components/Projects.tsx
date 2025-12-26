@@ -58,16 +58,16 @@ const Projects = () => {
     K -->|Yes| A
     K -->|No| L[End]`,
     },
-    {
-      title: 'LLM Code Generator',
-      description: 'Generate boilerplate code using natural language',
-      longDescription: 'An intelligent code generation tool that leverages LLMs to create boilerplate code, suggest implementations, and explain complex code patterns. Supports multiple programming languages.',
-      technologies: ['LangChain', 'Python', 'FastAPI', 'React', 'TypeScript'],
-      githubUrl: 'https://github.com/yourusername/code-gen',
-      demoUrl: 'https://yourproject2.com',
-      category: 'llm',
-      featured: true,
-    },
+    // {
+    //   title: 'LLM Code Generator',
+    //   description: 'Generate boilerplate code using natural language',
+    //   longDescription: 'An intelligent code generation tool that leverages LLMs to create boilerplate code, suggest implementations, and explain complex code patterns. Supports multiple programming languages.',
+    //   technologies: ['LangChain', 'Python', 'FastAPI', 'React', 'TypeScript'],
+    //   githubUrl: 'https://github.com/yourusername/code-gen',
+    //   demoUrl: 'https://yourproject2.com',
+    //   category: 'llm',
+    //   featured: true,
+    // },
     // {
     //   title: 'GenAI Content Creator',
     //   description: 'AI-powered content generation platform',
