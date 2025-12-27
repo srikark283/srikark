@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Cpu, Database, Globe, Layers } from 'lucide-react'
+import { Layout, Server, Share2, Brain } from 'lucide-react'
 
 const Skills = () => {
   const ref = useRef(null)
@@ -9,40 +9,37 @@ const Skills = () => {
 
   const skillCategories = [
     {
-      title: 'Generative AI & LLMs',
-      icon: <Cpu className="w-6 h-6" />,
-      description: 'Architecting intelligent agents and RAG pipelines.',
-      skills: ['OpenAI GPT-4', 'LangChain', 'LangGraph', 'Gemini', 'Claude', 'Hugging Face', 'LlamaIndex', 'Prompt Engineering'],
-      color: 'text-purple-400',
-      bg: 'bg-purple-500/10',
-      border: 'border-purple-500/20'
+      title: 'LLM & Generative AI',
+      icon: <Brain className="w-6 h-6" />,
+      description: 'Orchestrating agents and semantic pipelines.',
+      skills: ['LangChain', 'LangGraph', 'OpenAI', 'Google Gemini', 'Anthropic Claude', 'Ollama', 'Embedding Models', 'Prompt Engineering'],
+      // Using a subtle tech-blue for accents
+      accent: 'text-blue-400',
+      border: 'group-hover:border-blue-500/50'
     },
     {
-      title: 'Data Engineering',
-      icon: <Database className="w-6 h-6" />,
-      description: 'Building robust pipelines and scalable storage.',
-      skills: ['Python', 'SQL', 'PostgreSQL', 'Neo4j (Graph DB)', 'Pinecone', 'Vector Databases', 'ETL Pipelines', 'Data Modeling'],
-      color: 'text-blue-400',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500/20'
+      title: 'Backend & Data',
+      icon: <Server className="w-6 h-6" />,
+      description: 'High-performance APIs and data structures.',
+      skills: ['Python', 'FastAPI', 'PostgreSQL', 'SQLite', 'Neo4j (Graph DB)', 'Vector Databases', 'SQLAlchemy', 'Pydantic'],
+      accent: 'text-emerald-400',
+      border: 'group-hover:border-emerald-500/50'
     },
     {
-      title: 'Full Stack Engineering',
-      icon: <Globe className="w-6 h-6" />,
-      description: 'Creating responsive, modern user interfaces.',
-      skills: ['TypeScript', 'React', 'Next.js', 'Node.js', 'Tailwind CSS', 'Framer Motion', 'REST/GraphQL', 'Vite'],
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-500/10',
-      border: 'border-emerald-500/20'
+      title: 'Frontend Engineering',
+      icon: <Layout className="w-6 h-6" />,
+      description: 'Responsive, interactive user interfaces.',
+      skills: ['React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Chart.js', 'Vite', 'Responsive Design', 'State Management'],
+      accent: 'text-purple-400',
+      border: 'group-hover:border-purple-500/50'
     },
     {
-      title: 'DevOps & Architecture',
-      icon: <Layers className="w-6 h-6" />,
-      description: 'Deployment, containerization, and cloud infra.',
-      skills: ['Docker', 'Kubernetes', 'AWS', 'Azure', 'CI/CD', 'Git/GitHub', 'Microservices', 'System Design'],
-      color: 'text-orange-400',
-      bg: 'bg-orange-500/10',
-      border: 'border-orange-500/20'
+      title: 'Architecture & Tools',
+      icon: <Share2 className="w-6 h-6" />,
+      description: 'System integration and protocols.',
+      skills: ['Model Context Protocol (MCP)', 'REST APIs', 'Server-Sent Events (SSE)', 'Git', 'Docker', 'System Design', 'CI/CD'],
+      accent: 'text-orange-400',
+      border: 'group-hover:border-orange-500/50'
     },
   ]
 
@@ -50,9 +47,7 @@ const Skills = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
+      transition: { staggerChildren: 0.1 }
     }
   }
 
@@ -71,12 +66,12 @@ const Skills = () => {
       ref={ref}
       className="relative py-24 sm:py-32 bg-[#020617] overflow-hidden"
     >
-      {/* Background Ambience */}
-      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/10 via-[#020617] to-[#020617] pointer-events-none" />
+      {/* Background Ambience - Matches Projects.tsx */}
+      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary-900/20 via-[#020617] to-[#020617] pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
         
-        {/* Header */}
+        {/* Header - Matches Design Language */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
@@ -90,8 +85,8 @@ const Skills = () => {
             Technical <span className="text-gray-500">Arsenal</span>
           </h2>
           <p className="text-gray-400 text-lg leading-relaxed">
-            A specialized stack focused on bridging the gap between traditional 
-            software engineering and modern Artificial Intelligence.
+            A specialized stack focused on bridging the gap between robust 
+            backend engineering and modern Artificial Intelligence.
           </p>
         </motion.div>
 
@@ -106,11 +101,11 @@ const Skills = () => {
             <motion.div
               key={category.title}
               variants={itemVariants}
-              className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-colors"
+              className={`group relative bg-white/5 border border-white/10 rounded-2xl p-8 transition-all duration-300 hover:bg-white/[0.07] ${category.border}`}
             >
               {/* Category Header */}
               <div className="flex items-start gap-4 mb-8">
-                <div className={`p-3 rounded-lg ${category.bg} ${category.color} border ${category.border}`}>
+                <div className={`p-3 rounded-lg bg-white/5 border border-white/10 ${category.accent}`}>
                   {category.icon}
                 </div>
                 <div>
@@ -126,7 +121,7 @@ const Skills = () => {
                     key={skill}
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-black/40 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-white hover:border-white/30 transition-colors cursor-default"
                   >
-                    <span className={`w-1.5 h-1.5 rounded-full ${category.color.replace('text-', 'bg-')}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${category.accent.replace('text-', 'bg-')}`} />
                     {skill}
                   </div>
                 ))}

@@ -83,14 +83,14 @@ const Projects = () => {
     {
       title: 'Multi-Agent AI System',
       description: 'Complex system with LangGraph orchestration.',
-      longDescription: 'Single-pass LLM calls struggle with complex, multi-step workflows that require planning and tool use. This project implements a sophisticated multi-agent architecture using LangGraph. A "Supervisor" agent orchestrates specialized sub-agents, delegating tasks and aggregating results. By integrating a Neo4j graph database for shared state and using the Model Context Protocol (MCP) for tool interfaces, the system achieves a level of autonomy and reasoning capability that standard chatbots cannot match.',
-      technologies: ['LangGraph', 'LangChain', 'OpenAI', 'Gemini', 'Neo4j', 'MCP'],
+      longDescription: 'Single-pass LLM calls struggle with complex, multi-step workflows that require planning and tool use. This project implements a sophisticated multi-agent architecture using LangGraph. A "Supervisor" agent orchestrates specialized sub-agents, delegating tasks and aggregating results. By integrating a SQLite database for shared state and using the Model Context Protocol (MCP) for tool interfaces, the system achieves a level of autonomy and reasoning capability that standard chatbots cannot match.',
+      technologies: ['LangGraph', 'LangChain', 'OpenAI', 'Gemini', 'SQLite', 'MCP'],
       githubUrl: 'https://github.com/srikark283/multi-agent-ai-system',
       category: 'llm',
       featured: true,
       features: [
         'LangGraph Supervisor Pattern',
-        'Shared memory with Neo4j',
+        'Shared memory with SQLite',
         'MCP Tool Integration',
         'State management'
       ],
@@ -98,7 +98,7 @@ const Projects = () => {
         { title: 'Task Input', description: 'Complex objective', icon: 'user', tech: 'User Request' },
         { title: 'Supervisor', description: 'Route to agents', icon: 'network', tech: 'LangGraph' },
         { title: 'Agents', description: 'Execute sub-tasks', icon: 'ai', tech: 'Gemini / OpenAI' },
-        { title: 'Memory', description: 'Read/Write state', icon: 'db', tech: 'Neo4j' },
+        { title: 'Memory', description: 'Read/Write state', icon: 'db', tech: 'SQLite' },
         { title: 'Tools', description: 'External actions', icon: 'tool', tech: 'MCP Servers' },
         { title: 'Aggregation', description: 'Compile results', icon: 'check', tech: 'Supervisor' }
       ]

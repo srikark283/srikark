@@ -1,83 +1,101 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Code2, Brain, Rocket } from 'lucide-react'
+import { Database, Brain, Rocket, Code2 } from 'lucide-react'
 
 const About = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
-  const features = [
+  const cards = [
     {
-      icon: <Brain className="w-8 h-8" />,
-      title: 'AI & Machine Learning',
-      description: 'Building intelligent systems with LLMs, GPT models, and generative AI technologies',
+      icon: <Database className="w-6 h-6 text-blue-400" />,
+      title: 'Data Roots',
+      description: '13+ years building scalable ETL pipelines, data warehouses, and backend infrastructure.'
     },
     {
-      icon: <Code2 className="w-8 h-8" />,
-      title: 'Full-Stack Development',
-      description: 'Creating robust web applications with modern frameworks and best practices',
+      icon: <Brain className="w-6 h-6 text-purple-400" />,
+      title: 'AI Evolution',
+      description: '4 years dedicated to LLMs, RAG, and Multi-Agent systems using LangChain & LangGraph.'
     },
     {
-      icon: <Rocket className="w-8 h-8" />,
-      title: 'Innovation Focus',
-      description: 'Transforming ideas into reality with cutting-edge solutions and creative problem-solving',
-    },
+      icon: <Rocket className="w-6 h-6 text-emerald-400" />,
+      title: 'Production Focus',
+      description: 'Moving beyond notebooks to deploy reliable, containerized AI applications.'
+    }
   ]
 
   return (
-    <section
-      id="about"
-      ref={ref}
-      className="relative py-24 sm:py-32 overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950"></div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="about" ref={ref} className="relative py-24 bg-[#020617] overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto text-center mb-16"
+          className="mb-12 max-w-2xl"
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-white">About</span>{' '}
-            <span className="text-gradient">Me</span>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-10 h-[1px] bg-primary-500" />
+            <span className="text-primary-400 font-mono text-sm tracking-widest uppercase">About Me</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Engineering the <span className="text-gray-500">Future</span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-400 leading-relaxed mb-8">
-            I'm a passionate developer and innovator specializing in building
-            cutting-edge solutions using Large Language Models and Generative AI.
-            My work focuses on creating intelligent systems that solve real-world
-            problems and push the boundaries of what's possible with AI.
-          </p>
-          <p className="text-lg text-gray-400 leading-relaxed">
-            With a strong foundation in software engineering and a deep curiosity
-            for emerging technologies, I've developed several projects that showcase
-            the power of LLMs and GenAI in practical applications. Each project
-            represents a unique exploration of AI capabilities and creative problem-solving.
-          </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="glass rounded-2xl p-8 hover:bg-white/10 transition-all group"
-            >
-              <div className="text-primary-400 mb-4 group-hover:scale-110 transition-transform">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-white">
-                {feature.title}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          
+          {/* Text Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6"
+          >
+            <p className="text-xl text-gray-300 leading-relaxed font-light">
+              I am a <strong className="text-white font-semibold">Senior AI Engineer</strong> bridging the gap between robust data infrastructure and frontier Artificial Intelligence.
+            </p>
+            <p className="text-gray-400 leading-relaxed">
+              With a <strong className="text-white">13-year foundation in Data Engineering</strong>, I specialize in building production-grade AI systems that are as reliable as they are innovative. I don't just write prompts; I engineer the end-to-end ecosystems—from data ingestion and vectorization to orchestration and UI.
+            </p>
+            <p className="text-gray-400 leading-relaxed">
+              For the past <strong className="text-white">4 years</strong>, I have focused exclusively on the AI space, architecting Multi-Agent Systems, RAG pipelines, and Large Language Model applications. My mission is to ensure that 'intelligence' is supported by scalable architecture.
+            </p>
+            
+            <div className="pt-4">
+                <a href="#contact" className="inline-flex items-center gap-2 text-primary-400 hover:text-primary-300 transition-colors border-b border-primary-500/30 hover:border-primary-500 pb-1">
+                    Let's discuss your project <Code2 className="w-4 h-4" />
+                </a>
+            </div>
+          </motion.div>
+
+          {/* Cards */}
+          <div className="grid gap-6">
+            {cards.map((card, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: 30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
+                transition={{ duration: 0.5, delay: 0.4 + (index * 0.1) }}
+                className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/[0.07] transition-colors"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 bg-black/20 rounded-lg border border-white/5">
+                    {card.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-2">{card.title}</h3>
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                      {card.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
         </div>
       </div>
     </section>
