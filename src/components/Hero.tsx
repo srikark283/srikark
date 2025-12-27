@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Sparkles, BrainCircuit, Database, ChevronDown } from 'lucide-react'
+import { BrainCircuit, Database, ChevronDown } from 'lucide-react'
 
 const Hero = () => {
   const containerVariants = {

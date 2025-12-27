@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
-import { ArrowUpRight, Github, ExternalLink, Sparkles, Layers, MessageSquare, Zap, Code } from 'lucide-react'
+import { ArrowUpRight, Sparkles, Zap, Code } from 'lucide-react'
 import ProjectDetailModal from './ProjectDetailModal'
 
 // --- Interface Definitions ---

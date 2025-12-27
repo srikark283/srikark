@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Cpu, Database, Globe, Terminal, Code2, Layers } from 'lucide-react'
+import { Cpu, Database, Globe, Layers } from 'lucide-react'
 
 const Skills = () => {
   const ref = useRef(null)
