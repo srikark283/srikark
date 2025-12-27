@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { Cpu, Database, Globe, Terminal, Code2, Layers } from 'lucide-react'
 
 const Skills = () => {
   const ref = useRef(null)
@@ -8,80 +9,131 @@ const Skills = () => {
 
   const skillCategories = [
     {
-      title: 'Programming Languages',
-      skills: ['SQL', 'Python', 'JavaScript', 'TypeScript', 'Java'],
-      color: 'from-blue-500 to-cyan-500',
+      title: 'Generative AI & LLMs',
+      icon: <Cpu className="w-6 h-6" />,
+      description: 'Architecting intelligent agents and RAG pipelines.',
+      skills: ['OpenAI GPT-4', 'LangChain', 'LangGraph', 'Gemini', 'Claude', 'Hugging Face', 'LlamaIndex', 'Prompt Engineering'],
+      color: 'text-purple-400',
+      bg: 'bg-purple-500/10',
+      border: 'border-purple-500/20'
     },
     {
-      title: 'AI/ML Technologies',
-      skills: ['OpenAI GPT', 'Gemini', 'Claude', 'LangChain', 'Hugging Face', 'TensorFlow', 'PyTorch', 'Transformers', 'Embedding Models'],
-      color: 'from-purple-500 to-pink-500',
+      title: 'Data Engineering',
+      icon: <Database className="w-6 h-6" />,
+      description: 'Building robust pipelines and scalable storage.',
+      skills: ['Python', 'SQL', 'PostgreSQL', 'Neo4j (Graph DB)', 'Pinecone', 'Vector Databases', 'ETL Pipelines', 'Data Modeling'],
+      color: 'text-blue-400',
+      bg: 'bg-blue-500/10',
+      border: 'border-blue-500/20'
     },
     {
-      title: 'Web Technologies',
-      skills: ['React', 'Next.js', 'Vite', 'Node.js', 'REST APIs'],
-      color: 'from-green-500 to-emerald-500',
+      title: 'Full Stack Engineering',
+      icon: <Globe className="w-6 h-6" />,
+      description: 'Creating responsive, modern user interfaces.',
+      skills: ['TypeScript', 'React', 'Next.js', 'Node.js', 'Tailwind CSS', 'Framer Motion', 'REST/GraphQL', 'Vite'],
+      color: 'text-emerald-400',
+      bg: 'bg-emerald-500/10',
+      border: 'border-emerald-500/20'
     },
     {
-      title: 'Tools & Platforms',
-      skills: ['Git', 'Docker', 'Azure', 'AWS', 'Vercel', 'PostgreSQL', 'Neo4j', 'LangGraph'],
-      color: 'from-orange-500 to-red-500',
+      title: 'DevOps & Architecture',
+      icon: <Layers className="w-6 h-6" />,
+      description: 'Deployment, containerization, and cloud infra.',
+      skills: ['Docker', 'Kubernetes', 'AWS', 'Azure', 'CI/CD', 'Git/GitHub', 'Microservices', 'System Design'],
+      color: 'text-orange-400',
+      bg: 'bg-orange-500/10',
+      border: 'border-orange-500/20'
     },
   ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  }
 
   return (
     <section
       id="skills"
       ref={ref}
-      className="relative py-24 sm:py-32 overflow-hidden"
+      className="relative py-24 sm:py-32 bg-[#020617] overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950"></div>
-      
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      {/* Background Ambience */}
+      <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-900/10 via-[#020617] to-[#020617] pointer-events-none" />
+
+      <div className="container mx-auto px-6 relative z-10">
+        
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          className="mb-16 max-w-2xl"
         >
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-            <span className="text-white">Skills &</span>{' '}
-            <span className="text-gradient">Technologies</span>
+          <div className="flex items-center gap-2 mb-4">
+            <span className="w-10 h-[1px] bg-primary-500" />
+            <span className="text-primary-400 font-mono text-sm tracking-widest uppercase">Expertise</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Technical <span className="text-gray-500">Arsenal</span>
           </h2>
-          <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto">
-            A comprehensive toolkit for building innovative solutions
+          <p className="text-gray-400 text-lg leading-relaxed">
+            A specialized stack focused on bridging the gap between traditional 
+            software engineering and modern Artificial Intelligence.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
-          {skillCategories.map((category, categoryIndex) => (
+        {/* Grid */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="grid md:grid-cols-2 gap-6"
+        >
+          {skillCategories.map((category) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, delay: categoryIndex * 0.1 }}
-              className="glass rounded-2xl p-8 hover:bg-white/10 transition-all"
+              variants={itemVariants}
+              className="group relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-colors"
             >
-              <h3 className="text-2xl font-semibold mb-6 text-white flex items-center gap-3">
-                <span className={`w-1 h-8 bg-gradient-to-b ${category.color} rounded-full`}></span>
-                {category.title}
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.span
+              {/* Category Header */}
+              <div className="flex items-start gap-4 mb-8">
+                <div className={`p-3 rounded-lg ${category.bg} ${category.color} border ${category.border}`}>
+                  {category.icon}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">{category.title}</h3>
+                  <p className="text-sm text-gray-400">{category.description}</p>
+                </div>
+              </div>
+
+              {/* Skills List */}
+              <div className="flex flex-wrap gap-2">
+                {category.skills.map((skill) => (
+                  <div
                     key={skill}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.3, delay: categoryIndex * 0.1 + skillIndex * 0.05 }}
-                    className={`px-4 py-2 bg-gradient-to-r ${category.color} text-white rounded-lg text-sm font-medium shadow-lg hover:scale-105 transition-transform cursor-default`}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-black/40 border border-white/10 rounded-lg text-sm text-gray-300 hover:text-white hover:border-white/30 transition-colors cursor-default"
                   >
+                    <span className={`w-1.5 h-1.5 rounded-full ${category.color.replace('text-', 'bg-')}`} />
                     {skill}
-                  </motion.span>
+                  </div>
                 ))}
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
