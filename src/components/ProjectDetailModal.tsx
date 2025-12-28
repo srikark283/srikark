@@ -1,5 +1,10 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Github, ExternalLink, Layers, ArrowRight, Database, Globe, Zap, MessageSquare, FileText, Save, Search, Network, Plug, Brain, CheckCircle, LineChart, Code2 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Github, ExternalLink, Layers, Database, Globe, Zap, MessageSquare, FileText, Save, Search, Network, Plug, Brain, CheckCircle, LineChart, Code2 } from 'lucide-react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 
 // --- Types ---
 interface FlowStep {
@@ -7,6 +12,7 @@ interface FlowStep {
   description: string
   icon: 'user' | 'server' | 'ai' | 'db' | 'web' | 'code' | 'file' | 'tool' | 'chart' | 'network' | 'search' | 'check' | 'save'
   tech: string
+  color?: string
 }
 
 interface Project {
@@ -27,91 +33,150 @@ interface ProjectDetailModalProps {
   onClose: () => void
 }
 
-// --- Icons Map (Aligned to your stack) ---
+// --- Icons Map ---
 const iconMap = {
-  user: MessageSquare,    // User Input
-  server: Zap,            // FastAPI / Python Backend
-  ai: Brain,               // LLMs (OpenAI, Claude, Gemini)
-  db: Database,          // Postgres, SQLite, Neo4j
-  web: Globe,            // React / TypeScript
-  code: Code2,           // Scripting / LangChain
-  file: FileText,        // Documents / PDF
-  tool: Plug,            // MCP / External Tools
-  chart: LineChart,      // Chart.js
-  network: Network,      // Knowledge Graph
-  search: Search,        // Retrieval / Vector Search
-  check: CheckCircle,    // Validation / Success
-  save: Save             // Persistence
+  user: MessageSquare,
+  server: Zap,
+  ai: Brain,
+  db: Database,
+  web: Globe,
+  code: Code2,
+  file: FileText,
+  tool: Plug,
+  chart: LineChart,
+  network: Network,
+  search: Search,
+  check: CheckCircle,
+  save: Save
 }
 
-// --- Sub-Component: Architecture Flow Visualizer ---
+// Color palette
+const stepColors = [
+  'from-blue-500 to-cyan-400',
+  'from-purple-500 to-pink-400',
+  'from-emerald-500 to-teal-400',
+  'from-amber-500 to-orange-400',
+  'from-violet-500 to-purple-400',
+  'from-sky-500 to-blue-400',
+  'from-rose-500 to-pink-400',
+  'from-lime-500 to-emerald-400'
+]
+
+// --- Architecture Flow Visualizer ---
 const ArchitectureFlow = ({ steps }: { steps: FlowStep[] }) => {
   return (
-    <div className="relative py-8 px-4">
-      {/* Background Track Line */}
-      <div 
-        className="
-          absolute bg-gray-800 
-          /* Mobile: Vertical line */
-          left-[28px] top-0 bottom-0 w-0.5 
-          /* Desktop: Horizontal line fixed */
-          md:left-0 md:right-0 md:w-auto md:h-0.5 md:top-[60px] md:bottom-auto
-        " 
-      />
-      
-      <div className="flex flex-col md:flex-row md:justify-between gap-8 relative">
-        {steps.map((step, index) => {
-          // Fallback to Globe if icon not found
+    <div className="py-2">
+      {/* Mobile: Vertical Stack (Full Descriptions) */}
+      <div className="lg:hidden space-y-4">
+        {steps.map((step, i) => {
           const Icon = iconMap[step.icon] || Globe
+          const colorClass = stepColors[i % stepColors.length]
           
           return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15 }}
-              className="relative flex md:flex-col items-center gap-4 md:text-center z-10 md:flex-1"
+              transition={{ delay: i * 0.1 }}
+              className="relative flex gap-4 p-4 rounded-xl border border-primary/10 bg-gradient-to-br from-primary/5 to-transparent backdrop-blur-sm overflow-hidden"
             >
-              {/* Node Circle */}
-              <div className="relative flex-shrink-0">
-                <div className="w-14 h-14 rounded-full bg-gray-900 border border-gray-700 flex items-center justify-center shadow-xl z-20 relative group-hover:border-primary-500 transition-colors">
-                  <Icon className="w-6 h-6 text-primary-400" />
-                </div>
-                {/* Pulse Effect */}
-                <div className="absolute inset-0 rounded-full bg-primary-500/20 animate-ping opacity-20" />
-              </div>
-
-              {/* Connecting Line (Mobile Only) */}
-              {index !== steps.length - 1 && (
-                <div className="absolute left-[28px] top-14 h-full w-0.5 bg-gradient-to-b from-primary-500 to-gray-800 md:hidden" />
+              {/* Connector Line for Mobile */}
+              {i !== steps.length - 1 && (
+                 <div className="absolute left-[28px] top-12 bottom-0 w-[2px] bg-gradient-to-b from-primary/20 to-transparent" />
               )}
 
-              {/* Content Card */}
-              <div className="glass p-4 rounded-xl border border-white/5 bg-gray-900/50 w-full md:min-h-[140px] hover:bg-gray-800/50 transition-colors">
-                <div className="text-xs font-mono text-primary-400 mb-1 uppercase tracking-wider">
-                  Step 0{index + 1}
+              <div className="relative shrink-0">
+                <div className={`
+                  w-10 h-10 rounded-lg flex items-center justify-center
+                  bg-gradient-to-br ${colorClass}
+                  shadow-md shadow-primary/20 relative z-10
+                `}>
+                  <Icon className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-bold text-white mb-1">{step.title}</h4>
-                <p className="text-xs text-gray-400 mb-2 leading-relaxed">{step.description}</p>
-                <span className="inline-block px-2 py-1 bg-white/5 rounded text-[10px] text-gray-300 border border-white/5 font-mono">
-                  {step.tech}
-                </span>
               </div>
-
-              {/* Arrow Indicator (Desktop) */}
-              {index !== steps.length - 1 && (
-                <div className="hidden md:block absolute top-5 -right-1/2 w-full text-center pointer-events-none opacity-50">
-                  <motion.div
-                    animate={{ x: [0, 10, 0], opacity: [0.2, 1, 0.2] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <ArrowRight className="w-4 h-4 text-primary-500 mx-auto" />
-                  </motion.div>
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                  <h4 className="text-sm font-bold text-foreground">{step.title}</h4>
+                  <Badge variant="secondary" className="text-[10px] h-5 px-1.5 border-primary/20">{step.tech}</Badge>
                 </div>
-              )}
+                {/* Full Description shown here */}
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+              </div>
             </motion.div>
           )
         })}
+      </div>
+
+      {/* Desktop: Horizontal Flow (Readable Descriptions) */}
+      <div className="hidden lg:block relative">
+        <div className="overflow-x-auto pb-6 pt-2 -mx-4 px-4 hide-scrollbar">
+          <div className="flex items-start gap-4 min-w-max">
+            {steps.map((step, index) => {
+              const Icon = iconMap[step.icon] || Globe
+              const colorClass = stepColors[index % stepColors.length]
+              const isLast = index === steps.length - 1
+              
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: 15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  className="relative group w-[220px]"
+                >
+                  {/* Connecting Line */}
+                  {!isLast && (
+                    <div className="absolute top-[20px] left-[55%] w-full h-[1px] bg-gradient-to-r from-primary/40 to-primary/10 -z-10" />
+                  )}
+                  
+                  <div className="flex flex-col items-center text-center">
+                    {/* Icon Node */}
+                    <div className="relative mb-4">
+                      <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className={`
+                          relative z-10 w-11 h-11 rounded-xl
+                          bg-gradient-to-br ${colorClass}
+                          flex items-center justify-center
+                          shadow-lg shadow-primary/20
+                          border border-background/50
+                        `}
+                      >
+                        <Icon className="w-5 h-5 text-white" />
+                      </motion.div>
+                      
+                      {/* Step Number Badge */}
+                      <div className="absolute -top-2 -right-2 z-20 w-5 h-5 rounded-full bg-background border border-primary/20 flex items-center justify-center shadow-sm">
+                        <span className="text-[10px] font-bold text-foreground">{index + 1}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Content Card - Increased size for readability */}
+                    <Card className="w-full min-h-[140px] border-primary/20 bg-gradient-to-b from-white/50 to-transparent dark:from-gray-900/50 backdrop-blur-sm hover:border-primary/40 transition-colors">
+                      <CardContent className="p-4 flex flex-col h-full text-left">
+                        <div className="mb-2">
+                           <div className="flex justify-between items-start mb-1">
+                              <h4 className="text-xs font-bold text-foreground leading-tight">{step.title}</h4>
+                           </div>
+                           <Badge variant="outline" className="text-[9px] px-1.5 py-0 border-primary/20 bg-primary/5 text-primary/80">
+                              {step.tech}
+                           </Badge>
+                        </div>
+                        
+                        <Separator className="bg-primary/10 mb-2" />
+                        
+                        {/* Description - Standard readable size */}
+                        <p className="text-xs text-muted-foreground leading-normal">
+                          {step.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -121,138 +186,148 @@ const ProjectDetailModal = ({ project, isOpen, onClose }: ProjectDetailModalProp
   if (!project) return null
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100]"
-          />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-[95vw] sm:max-w-[90vw] lg:max-w-5xl xl:max-w-6xl max-h-[90vh] p-0 flex flex-col border-primary/20 shadow-xl bg-[#0b0f19]">
+        
+        {/* Header */}
+        <DialogHeader className="px-5 py-5 pr-10 border-b border-primary/10 bg-gradient-to-r from-primary/5 via-primary/5 to-transparent shrink-0">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <DialogTitle className="text-xl sm:text-2xl font-bold text-primary ">
+                {project.title}
+              </DialogTitle>
+              <DialogDescription className="text-sm mt-1 text-muted-foreground">
+                {project.description}
+              </DialogDescription>
+            </div>
+            <Badge variant="outline" className="text-xs uppercase tracking-wider border-primary/20 text-primary-400 shrink-0">
+              {project.category}
+            </Badge>
+          </div>
+        </DialogHeader>
 
-          {/* Modal Container */}
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto flex-1 p-5 sm:p-6 custom-scrollbar">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 md:inset-10 z-[110] flex items-center justify-center p-4 pointer-events-none"
+            initial={{ opacity: 0, x: -5 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="bg-[#0b0f19] border border-white/10 w-full max-w-6xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col pointer-events-auto">
+            {/* Grid Layout */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
               
-              {/* Header Bar */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10 bg-[#0b0f19]">
-                <div>
-                  <h2 className="text-2xl font-bold text-white">{project.title}</h2>
-                  <p className="text-sm text-gray-400 mt-1">{project.description}</p>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+              {/* Left Column */}
+              <div className="md:col-span-2 space-y-5">
+                <Card className="border-primary/10 bg-white/5">
+                  <CardContent className="p-5">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+                      <Brain className="w-4 h-4 text-primary-400" />
+                      The Challenge & Solution
+                    </h3>
+                    <p className="text-sm text-gray-400 leading-relaxed">
+                      {project.longDescription}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {project.features && (
+                  <Card className="border-primary/10 bg-white/5">
+                    <CardContent className="p-5">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-primary-400" />
+                        Key Features
+                      </h3>
+                      <div className="grid sm:grid-cols-2 gap-3">
+                        {project.features.map((feature, i) => (
+                          <div key={i} className="flex items-start gap-2.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary-500 mt-1.5 shrink-0" />
+                            <p className="text-sm text-gray-400">{feature}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
 
-              {/* Scrollable Content Area */}
-              <div className="overflow-y-auto flex-1 p-6 md:p-8 custom-scrollbar">
-                
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {/* Grid Layout for Overview & Sidebar */}
-                  <div className="grid md:grid-cols-3 gap-8 mb-12">
-                    {/* Main Content (Left 2 cols) */}
-                    <div className="md:col-span-2 space-y-8">
-                      <div>
-                        <h3 className="text-lg font-semibold text-white mb-3">The Challenge & Solution</h3>
-                        <p className="text-gray-300 leading-relaxed text-sm md:text-base">
-                          {project.longDescription}
-                        </p>
-                      </div>
-
-                      {project.features && (
-                        <div>
-                          <h3 className="text-lg font-semibold text-white mb-3">Key Features</h3>
-                          <ul className="grid sm:grid-cols-2 gap-3">
-                            {project.features.map((feature, i) => (
-                              <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-                                <span className="text-primary-400 mt-1">▹</span>
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+              {/* Right Column */}
+              <div className="space-y-4">
+                <Card className="border-primary/10 bg-white/5">
+                  <CardContent className="p-5">
+                    <h4 className="text-xs font-bold text-primary-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <Code2 className="w-3.5 h-3.5" />
+                      Tech Stack
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech) => (
+                        <Badge 
+                          key={tech} 
+                          variant="secondary" 
+                          className="text-[10px] px-2.5 py-1 bg-white/10 text-gray-300 hover:bg-white/20 border-transparent"
+                        >
+                          {tech}
+                        </Badge>
+                      ))}
                     </div>
+                  </CardContent>
+                </Card>
 
-                    {/* Sidebar (Right 1 col) */}
-                    <div className="space-y-6">
-                      <div className="p-5 rounded-xl bg-white/5 border border-white/10">
-                        <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Tech Stack</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologies.map((tech) => (
-                            <span key={tech} className="px-3 py-1 bg-black/40 border border-white/10 rounded text-xs text-primary-300">
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
+                <div className="grid grid-cols-1 gap-3">
+                  {project.githubUrl && (
+                    <Button asChild className="w-full bg-white text-black hover:bg-gray-200">
+                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="gap-2">
+                        <Github className="w-4 h-4" /> Source Code
+                      </a>
+                    </Button>
+                  )}
+                  {project.demoUrl && (
+                    <Button asChild variant="outline" className="w-full border-white/20 text-white hover:bg-white/10">
+                      <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="gap-2">
+                        <ExternalLink className="w-4 h-4" /> Live Demo
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
 
-                      <div className="space-y-3">
-                         {project.githubUrl && (
-                          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                            <Github className="w-4 h-4" /> View Source
-                          </a>
-                        )}
-                        {project.demoUrl && (
-                          <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full py-3 bg-transparent border border-white/20 text-white font-semibold rounded-lg hover:bg-white/5 transition-colors">
-                            <ExternalLink className="w-4 h-4" /> Live Demo
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Architecture Section (Full Width Below) */}
-                  <div className="border-t border-white/10 pt-10">
-                    <div className="mb-6 flex items-center gap-3">
-                      <Layers className="w-5 h-5 text-primary-400" />
-                      <h3 className="text-xl font-bold text-white">System Architecture</h3>
-                    </div>
-                    
-                    {project.architectureFlow ? (
-                      <div className="bg-black/40 rounded-2xl border border-white/10 p-6 md:p-10 overflow-x-auto">
-                        <ArchitectureFlow steps={project.architectureFlow} />
-                      </div>
-                    ) : (
-                      <div className="text-center py-20 text-gray-500 border border-dashed border-white/10 rounded-xl">
-                        <Layers className="w-10 h-10 mx-auto mb-3 opacity-20" />
-                        <p>Detailed architecture diagram not available for this project.</p>
-                      </div>
-                    )}
-                    
-                    <div className="mt-8 p-4 bg-primary-900/10 border border-primary-500/20 rounded-lg">
-                        <h4 className="text-sm font-semibold text-primary-400 mb-2">Engineering Note</h4>
-                        <p className="text-xs text-gray-400">
-                            This system is designed for scalability. For production environments, I utilize 
-                            container orchestration and ensure stateless design for the API layer (FastAPI) to handle 
-                            horizontal scaling during high-load events.
-                        </p>
-                    </div>
-                  </div>
-                </motion.div>
-                
+            {/* Architecture Section */}
+            <div className="border-t border-primary/10 pt-8">
+              <div className="mb-6 flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary-500/10 text-primary-400">
+                   <Layers className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">
+                    System Architecture
+                  </h3>
+                  <p className="text-xs text-gray-500">Data flow and component interaction</p>
+                </div>
+              </div>
+              
+              {project.architectureFlow ? (
+                <div className="rounded-xl border border-primary/10 bg-white/[0.02] p-4 sm:p-6 overflow-hidden">
+                  <ArchitectureFlow steps={project.architectureFlow} />
+                </div>
+              ) : (
+                <div className="text-center py-12 border border-dashed border-primary/20 rounded-xl bg-white/[0.02]">
+                  <p className="text-sm text-gray-500">Architecture diagram coming soon</p>
+                </div>
+              )}
+              
+              <div className="mt-4 p-4 rounded-lg bg-primary-500/5 border border-primary-500/10 flex gap-3">
+                <Zap className="w-4 h-4 text-primary-400 shrink-0 mt-0.5" />
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  <span className="font-bold text-primary-400">Engineering Note: </span>
+                  Designed for scalability with a stateless API layer (FastAPI) and container orchestration. 
+                  Supports horizontal scaling and high-throughput data processing.
+                </p>
               </div>
             </div>
           </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 

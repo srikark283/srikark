@@ -3,6 +3,9 @@ import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { ArrowUpRight, Sparkles, Zap, Code } from 'lucide-react'
 import ProjectDetailModal from './ProjectDetailModal'
+import { CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
 
 // --- Interface Definitions ---
 interface FlowStep {
@@ -31,6 +34,7 @@ const Projects = () => {
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [hovered, setHovered] = useState<number | null>(null)
 
   // --- Project Data ---
   const projects: Project[] = [
@@ -118,7 +122,7 @@ const Projects = () => {
         'Citation tracking'
       ],
       architectureFlow: [
-        { title: 'Ingestion', description: 'Parse data', icon: 'file', tech: 'LangChain' },
+        { title: 'Ingestion', description: 'Parse data', icon: 'file', tech: 'Python' },
         { title: 'Embedding', description: 'Create vectors', icon: 'ai', tech: 'Embedding Models' },
         { title: 'Vector DB', description: 'Store dense vectors', icon: 'db', tech: 'Postgres' },
         { title: 'Graph DB', description: 'Store relationships', icon: 'network', tech: 'Neo4j' },
@@ -132,7 +136,7 @@ const Projects = () => {
       longDescription: 'Documentation often lags behind development, leading to technical debt and onboarding friction. This tool automates the documentation process by combining static analysis with generative AI. It uses Python\'s AST module to extract code structure deterministically, which is then fed into an LLM context. The result is auto-generated, high-quality Markdown documentation that accurately describes function signatures, logic flows, and edge cases, keeping the docs in perfect sync with the codebase.',
       technologies: ['LangChain', 'OpenAI', 'TypeScript', 'React', 'Python'],
       githubUrl: 'https://github.com/srikark283/doc-generator',
-      category: 'web',
+      category: 'llm',
       features: [
         'AST Parsing with Python',
         'API documentation generation',
@@ -178,30 +182,30 @@ const Projects = () => {
   }
 
   return (
-    <section id="projects" ref={ref} className="relative py-24 sm:py-32 bg-[#020617] overflow-hidden">
+    <section id="projects" ref={ref} className="relative py-16 sm:py-20 md:py-24 bg-background overflow-hidden">
       {/* Background Ambience */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-[#020617] to-[#020617] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-purple-500/10 to-background pointer-events-none" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          className="mb-16 max-w-2xl"
+          className="mb-10 sm:mb-16 max-w-2xl"
         >
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-10 h-[1px] bg-primary-500" />
-            <span className="text-primary-400 font-mono text-sm tracking-widest uppercase">My Work</span>
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <span className="w-8 sm:w-10 h-px bg-gradient-to-r from-primary to-cyan-500" />
+            <span className="text-primary font-mono text-xs sm:text-sm tracking-widest uppercase">My Work</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Technical <span className="text-gray-500">Projects</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4 sm:mb-6">
+            Technical <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">Projects</span>
           </h2>
-          <p className="text-gray-400 text-lg leading-relaxed">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
             A selection of AI systems and data pipelines I've engineered. 
             Focusing on scalability, reliability, and business impact.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -212,46 +216,79 @@ const Projects = () => {
                 setSelectedProject(project)
                 setIsModalOpen(true)
               }}
-              className={`group cursor-pointer relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-primary-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary-900/20 flex flex-col`}
+              onMouseEnter={() => setHovered(index)}
+              onMouseLeave={() => setHovered(null)}
+              className={cn(
+                "group cursor-pointer h-full rounded-xl relative bg-card border border-border/50 overflow-hidden transition-all duration-300 ease-out",
+                hovered !== null && hovered !== index && "sm:blur-sm sm:scale-[0.98] sm:opacity-60",
+                hovered === index && "border-primary/50 shadow-lg shadow-primary/20 sm:scale-[1.02]"
+              )}
             >
-              <div className="p-6 h-full flex flex-col">
+              {/* Gradient border effect on hover */}
+              <div
+                className={cn(
+                  "absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 pointer-events-none",
+                  hovered === index && "opacity-100"
+                )}
+                style={{
+                  background: `linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3))`,
+                  padding: '1px',
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                }}
+              />
+
+              {/* Content */}
+              <CardContent className="p-4 sm:p-6 h-full flex flex-col relative z-10">
+                {/* Glow effect on hover */}
+                <div
+                  className={cn(
+                    "absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300 pointer-events-none",
+                    hovered === index && "opacity-100"
+                  )}
+                  style={{
+                    background: `radial-gradient(600px circle at center, rgba(59, 130, 246, 0.1), transparent 70%)`,
+                  }}
+                />
+
                 {/* Header */}
-                <div className="flex justify-between items-start mb-6">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 bg-white/5 rounded-lg text-primary-400 group-hover:text-white group-hover:bg-primary-600 transition-colors">
+                <div className="flex justify-between items-start mb-4 sm:mb-6 relative z-10">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <div className="p-1.5 sm:p-2 bg-gradient-to-br from-primary/10 to-cyan-500/5 rounded-lg border border-primary/20 text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:shadow-md group-hover:shadow-primary/30 transition-all shrink-0">
                       {categoryIcons[project.category]}
                     </div>
-                    <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">
+                    <Badge variant="outline" className="text-[10px] sm:text-xs font-mono uppercase tracking-wider border-primary/20 group-hover:border-primary/40">
                       {project.category.toUpperCase()}
-                    </span>
+                    </Badge>
                   </div>
-                  <ArrowUpRight className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
+                  <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
                 </div>
 
                 {/* Content */}
-                <div className="mb-auto">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-primary-400 transition-colors">
+                <div className="mb-auto relative z-10">
+                  <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed mb-4 sm:mb-6">
                     {project.description}
                   </p>
                 </div>
 
                 {/* Footer / Tech Stack */}
-                <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-border/50 relative z-10">
                   {project.technologies.slice(0, 3).map((tech) => (
-                    <span key={tech} className="text-[10px] font-mono text-gray-400 px-2 py-1 rounded bg-black/30 border border-white/5">
+                    <Badge key={tech} variant="outline" className="text-[9px] sm:text-[10px] font-mono border-primary/20 group-hover:border-primary/40">
                       {tech}
-                    </span>
+                    </Badge>
                   ))}
                   {project.technologies.length > 3 && (
-                    <span className="text-[10px] font-mono text-gray-500 px-2 py-1">
+                    <Badge variant="outline" className="text-[9px] sm:text-[10px] font-mono text-muted-foreground">
                       +{project.technologies.length - 3}
-                    </span>
+                    </Badge>
                   )}
                 </div>
-              </div>
+              </CardContent>
             </motion.div>
           ))}
         </div>

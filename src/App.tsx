@@ -20,13 +20,13 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <Navbar isScrolled={isScrolled} />
       <Hero />
       <About />
-      <Statistics />
       <Skills />
       <Projects />
+      <Statistics />
       <Contact />
       <Footer />
     </div>

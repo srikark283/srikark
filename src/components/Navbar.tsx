@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Menu, X, Terminal } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface NavbarProps {
   isScrolled: boolean
@@ -34,32 +36,46 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
 
   const navItems = [
     { name: 'About', href: '#about' },
-    { name: 'Impact', href: '#statistics' },
     { name: 'Stack', href: '#skills' },
     { name: 'Projects', href: '#projects' },
+    { name: 'Impact', href: '#statistics' },
     { name: 'Contact', href: '#contact' },
   ]
 
   const scrollTo = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-      setIsOpen(false)
-    }
+    setIsOpen(false)
+
+    // Add a small delay to ensure the menu close animation 
+    // doesn't interrupt the scroll action on mobile
+    setTimeout(() => {
+      const element = document.querySelector(href)
+      if (element) {
+        // Increase offset to account for the fixed header height (approx 80px)
+        // A value of 10 would leave the section title hidden behind the navbar
+        const headerOffset = 10 
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.scrollY - headerOffset
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 100) // 100ms delay is usually sufficient
   }
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      // Changed: Removed 'border-b' and specific border colors to avoid the solid line
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? 'bg-[#020617]/80 backdrop-blur-md py-4 shadow-lg shadow-black/10' // Added subtle shadow instead of border
-          : 'bg-transparent py-6'
-      }`}
+          ? "bg-background/80 backdrop-blur-md py-4 shadow-lg shadow-primary/5 border-b border-primary/20"
+          : "bg-transparent py-6"
+      )}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between">
           
           {/* Brand Identity */}
@@ -69,14 +85,14 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
               e.preventDefault()
               scrollTo('#hero')
             }}
-            className="group flex items-center gap-2"
+            className="group flex items-center gap-1.5 sm:gap-2"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="p-2 bg-white/5 border border-white/10 rounded-lg group-hover:border-primary-500/50 transition-colors">
-              <Terminal className="w-5 h-5 text-primary-400" />
+            <div className="p-1.5 sm:p-2 bg-gradient-to-br from-primary/10 to-cyan-500/5 border border-primary/30 rounded-lg group-hover:border-primary/60 group-hover:shadow-lg group-hover:shadow-primary/20 transition-all">
+              <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </div>
-            <span className="font-bold text-white text-lg tracking-tight font-mono">
+            <span className="font-bold text-foreground text-base sm:text-lg tracking-tight font-mono">
               Srikar K.
             </span>
           </motion.a>
@@ -91,17 +107,18 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
                   e.preventDefault()
                   scrollTo(item.href)
                 }}
-                className={`relative px-4 py-2 text-sm font-mono transition-colors rounded-lg ${
+                className={cn(
+                  "relative px-4 py-2 text-sm font-mono transition-colors rounded-lg",
                   activeSection === item.href.slice(1)
-                    ? 'text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-primary hover:bg-primary/10"
+                )}
               >
                 {item.name}
                 {activeSection === item.href.slice(1) && (
                   <motion.div
                     layoutId="activeSection"
-                    className="absolute inset-0 bg-white/5 border border-white/10 rounded-lg -z-10"
+                    className="absolute inset-0 bg-primary/10 border border-primary/30 rounded-lg -z-10 shadow-sm shadow-primary/10"
                     initial={false}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
@@ -111,12 +128,14 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
           </div>
 
           {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 text-gray-300 hover:text-white transition-colors"
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
       </div>
 
@@ -127,7 +146,7 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[#020617] border-b border-white/10 overflow-hidden shadow-2xl"
+            className="md:hidden bg-background border-b border-border overflow-hidden shadow-2xl"
           >
             <div className="container mx-auto px-4 py-4 space-y-2">
               {navItems.map((item) => (
@@ -138,13 +157,14 @@ const Navbar = ({ isScrolled }: NavbarProps) => {
                     e.preventDefault()
                     scrollTo(item.href)
                   }}
-                  className={`block px-4 py-3 rounded-lg text-sm font-mono transition-colors ${
+                  className={cn(
+                    "block px-4 py-3 rounded-lg text-sm font-mono transition-colors",
                     activeSection === item.href.slice(1)
-                      ? 'text-white bg-white/10 border border-white/10'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
-                  }`}
+                      ? "text-foreground bg-accent border border-border"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  )}
                 >
-                  <span className="text-primary-500 mr-2">{'>'}</span>
+                  <span className="text-primary mr-2">{'>'}</span>
                   {item.name}
                 </a>
               ))}
