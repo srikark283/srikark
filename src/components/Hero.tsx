@@ -29,23 +29,6 @@ const Hero = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,oklch(0.7_0.2_220_/_0.1)_1px,transparent_1px),linear-gradient(to_bottom,oklch(0.7_0.2_220_/_0.1)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gradient-to-br from-primary/20 via-purple-500/10 to-cyan-500/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-0 w-[800px] h-[500px] bg-gradient-to-tl from-primary/15 to-transparent rounded-full blur-[100px]" />
-        
-        {/* Shooting Stars */}
-        {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute h-0.5 w-[80px] bg-gradient-to-r from-transparent via-primary/50 to-transparent animate-meteor-effect"
-              style={{
-                top: `${Math.random() * 40}%`,
-                left: `${Math.random() * 20 + 60}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${Math.random() * 3 + 4}s`,
-                opacity: 0
-              }}
-            />
-          ))}
-        </div> */}
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -70,6 +53,9 @@ const Hero = () => {
             variants={itemVariants}
             className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-6 sm:mb-8 px-2"
           >
+            <span className="block text-2xl sm:text-3xl md:text-4xl font-semibold text-primary/90 mb-2 tracking-normal">
+              Hi, I&apos;m Srikar Krishnapurapu.
+            </span>
             <span className="text-foreground">Engineering the</span>
             <br />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-cyan-400 to-purple-400 animate-gradient bg-[length:200%_auto]">
@@ -83,7 +69,7 @@ const Hero = () => {
             className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 sm:mb-12 max-w-3xl mx-auto font-light leading-relaxed px-4"
           >
             Bridging the gap between <strong className="text-foreground">robust data infrastructure</strong> and 
-            <strong className="text-foreground"> frontier AI</strong>. Specialized in deploying scalable LLM systems 
+            <strong className="text-foreground"> frontier AI</strong>. Specialized in deploying <strong className="text-foreground">scalable & reliable</strong> LLM systems and <strong className="text-foreground">Generative AI</strong> solutions for enterprise-grade applications.
             and Generative AI solutions for enterprise-grade applications.
           </motion.p>
 
@@ -135,7 +121,9 @@ const Hero = () => {
         transition={{ delay: 1.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">Scroll</span>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground" aria-hidden="true">
+          Scroll
+        </span>
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity }}
