@@ -39,6 +39,29 @@ const Projects = () => {
   // --- Project Data ---
   const projects: Project[] = [
     {
+      title: 'PlainBI',
+      description: 'Modern business intelligence platform that allows anyone to query their data using plain English.',
+      longDescription: 'PlainBI bridges the gap between raw data and actionable insights. By leveraging advanced AI, it translates natural language questions into complex SQL queries or code, generating beautiful, interactive visualizations instantly.',
+      technologies: ['OpenAI', 'React', 'TypeScript', 'FastAPI', 'SQLite', 'Python'],
+      githubUrl: 'https://github.com/',
+      demoUrl: 'https://plainbi.vercel.app/',
+      category: 'llm',
+      featured: true,
+      features: [
+        'Natural Language Querying',
+        'Interactive Dashboards',
+        'Proactive AI Agents',
+        'Universal Connectivity',
+        'Enterprise-Grade Security'
+      ],
+      architectureFlow: [
+        { title: 'Connect Data Sources', description: 'Connect to your data sources', icon: 'db', tech: 'Python / MCP' },
+        { title: 'User Input', description: 'Chat message entered', icon: 'user', tech: 'React / TypeScript' },
+        { title: 'Inference', description: 'Generate reply', icon: 'ai', tech: 'OpenAI GPT-4o' },
+        { title: 'Insights', description: 'Generate insights', icon: 'chart', tech: 'React / TypeScript' },
+      ]
+    },
+    {
       title: 'AI Chat Assistant',
       description: 'Intelligent conversational AI with context awareness.',
       longDescription: 'Building a truly conversational AI requires overcoming the limitations of stateless web protocols and restricted context windows. The challenge was to maintain continuity in long-running dialogues. The solution is a high-performance backend using FastAPI and SQLite that implements a sliding-window context mechanism. This ensures the model retains critical conversation history while managing token usage efficiently, delivering a personalized and coherent user experience.',
@@ -200,7 +223,7 @@ const Projects = () => {
             Technical <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">Projects</span>
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            A selection of AI systems and data pipelines I've engineered. 
+            A selection of AI systems and data pipelines I've engineered.
             Focusing on scalability, reliability, and business impact.
           </p>
         </motion.div>
